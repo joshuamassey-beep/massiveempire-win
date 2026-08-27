@@ -3,440 +3,287 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Massive Empire Fantasy Football Tool</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%27http:%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox=%270%200%2064%2064%27%3E%3Crect%20width=%2764%27%20height=%2764%27%20rx=%2714%27%20fill=%27%230b1d2d%27%2F%3E%3Cpath%20d=%27M8%2046%20L24%2020%20L32%2032%20L40%2014%20L58%2046%20Z%27%20fill=%27%23f97316%27%2F%3E%3C%2Fsvg%3E" />
-<style>
-  :root {
-    --bg: #0b0d12;
-    --card: #161a22;
-    --border: #262c38;
-    --text: #e8eaf0;
-    --muted: #9aa3b2;
-    --accent: #c0392b;
-    --accent-glow: rgba(192, 57, 43, 0.35);
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    min-height: 100vh;
-    background: radial-gradient(circle at 50% 0%, #1a1e28 0%, var(--bg) 60%);
-    color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 6vh 20px 60px;
-  }
-  .back {
-    align-self: flex-start;
-    max-width: 640px;
-    width: 100%;
-    margin: 0 auto 24px;
-  }
-  .back a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 0.9rem;
-  }
-  .back a:hover { color: var(--text); }
-  .wrap { width: 100%; max-width: 640px; }
-  header { text-align: center; margin-bottom: 36px; }
-  .badge {
-    display: inline-block;
-    font-size: 0.72rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 999px;
-    padding: 4px 12px;
-    margin-bottom: 14px;
-  }
-  h1 {
-    font-size: 2rem;
-    margin: 0 0 10px;
-    letter-spacing: -0.02em;
-  }
-  header p.sub {
-    color: var(--muted);
-    margin: 0;
-    font-size: 1.02rem;
-  }
-  section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 28px 30px;
-    margin-bottom: 24px;
-  }
-  section h2 {
-    margin-top: 0;
-    font-size: 1.15rem;
-  }
-  section p, section li {
-    color: var(--muted);
-    line-height: 1.6;
-    font-size: 0.98rem;
-  }
-  section ul { margin: 0; padding-left: 20px; }
-  section li { margin-bottom: 8px; }
-  label {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--muted);
-    margin: 18px 0 6px;
-  }
-  label:first-of-type { margin-top: 0; }
-  input, select {
-    width: 100%;
-    background: #0e1117;
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 12px 14px;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-family: inherit;
-  }
-  input:focus, select:focus {
-    outline: none;
-    border-color: var(--accent);
-  }
-  button {
-    width: 100%;
-    margin-top: 26px;
-    padding: 14px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s ease, opacity 0.15s ease;
-  }
-  button:hover { background: #a5311f; }
-  button:disabled { opacity: 0.6; cursor: not-allowed; }
-  .status {
-    margin-top: 16px;
-    font-size: 0.9rem;
-    text-align: center;
-    line-height: 1.5;
-    display: none;
-  }
-  .status.show { display: block; }
-  .status.ok { color: #d7dae2; }
-  .status.err { color: #e07a72; }
-  footer {
-    margin-top: 40px;
-    color: var(--muted);
-    font-size: 0.78rem;
-    text-align: center;
-  }
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(4, 5, 8, 0.78);
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 50;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal-box {
-    background: var(--card);
-    border: 1px solid var(--accent);
-    box-shadow: 0 0 60px var(--accent-glow);
-    border-radius: 16px;
-    max-width: 640px;
-    width: 100%;
-    text-align: center;
-    display: flex;
-    align-items: stretch;
-    overflow: hidden;
-  }
-  .modal-box .modal-image {
-    flex: 0 0 200px;
-    width: 200px;
-    object-fit: cover;
-    object-position: top center;
-    display: block;
-  }
-  .modal-box .modal-content {
-    flex: 1;
-    min-width: 0;
-    padding: 34px 32px;
-  }
-  .modal-box .modal-badge {
-    display: inline-block;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 999px;
-    padding: 4px 12px;
-    margin-bottom: 16px;
-  }
-  .modal-box p {
-    color: #d7dae2;
-    line-height: 1.65;
-    font-size: 1rem;
-    margin: 0 0 12px;
-  }
-  .modal-box p:last-of-type { margin-bottom: 0; }
-  .modal-box button {
-    margin-top: 22px;
-    width: auto;
-    padding: 11px 26px;
-    font-size: 0.92rem;
-  }
-  @media (max-width: 560px) {
-    .modal-box {
-      flex-direction: column;
-      max-width: 440px;
-    }
-    .modal-box .modal-image {
-      flex: 0 0 180px;
-      width: 100%;
-      height: 180px;
-    }
-  }
-  .kicker {
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 0.09em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin: 0 0 10px;
-  }
-  .headline {
-    font-size: 1.4rem;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
-    margin: 0 0 14px;
-    color: var(--text);
-  }
-  .lede {
-    color: var(--muted);
-    font-size: 1rem;
-    max-width: 560px;
-    margin: 0 0 6px;
-  }
-  .scenario p {
-    color: #d7dae2;
-    line-height: 1.75;
-    font-size: 1rem;
-    margin: 0 0 6px;
-  }
-  .scenario p.q { font-weight: 700; margin-top: 14px; color: var(--text); }
-  .odds-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin: 18px 0 6px;
-  }
-  .odds-card {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    background: #0e1117;
-  }
-  .odds-card .pct { font-size: 1.4rem; font-weight: 800; }
-  .odds-card.act .pct { color: #e0655a; }
-  .odds-card.gamble .pct { color: #d9a441; }
-  .odds-card.wait .pct { color: #4fbf7a; }
-  .odds-card .odds-label {
-    font-size: 0.72rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    font-weight: 700;
-    margin-top: 4px;
-    color: var(--text);
-  }
-  .odds-card .odds-desc {
-    font-size: 0.83rem;
-    color: var(--muted);
-    margin-top: 6px;
-    line-height: 1.4;
-  }
-  .compare-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin: 16px 0 6px;
-  }
-  .compare-card {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    background: #0e1117;
-  }
-  .compare-card .pos { font-weight: 700; font-size: 0.9rem; color: var(--muted); }
-  .compare-card .score { font-weight: 800; font-size: 1.1rem; margin: 2px 0 4px; color: var(--text); }
-  .compare-card .chance { color: var(--muted); font-size: 0.88rem; }
-  .mode-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 14px;
-    margin-top: 14px;
-  }
-  .mode-card {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px 20px;
-    background: #0e1117;
-  }
-  .mode-card h3 { margin: 0 0 8px; font-size: 0.98rem; color: var(--text); }
-  .mode-card p { margin: 0; }
-  .closing-block { text-align: center; }
-  .closing-block h2 { font-size: 1.3rem; margin: 0 0 4px; }
-  .closing-block p.tag { color: var(--muted); font-style: italic; margin: 0; }
-</style>
+<title>Massive Empire — Fantasy Football Intelligence</title>
+<meta name="description" content="An invite-only fantasy football intelligence platform. Imperial Draft Command and eleven other tactical tools built to win your league." />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/brand/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/brand/favicon-192.png" />
+<link rel="apple-touch-icon" href="assets/img/brand/favicon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
-  <div class="back"><a href="https://5280content.com/">&larr; 5280 Content</a></div>
-  <div class="wrap">
-    <header>
-      <span class="badge">Invite Only</span>
-      <h1>Massive Empire Fantasy Football Tool</h1>
-      <p class="sub">An invite-only analytics edge built for one purpose: winning your league.</p>
-    </header>
 
-    <section>
-      <h2>Draft-Season Tools</h2>
-      <ul>
-        <li><strong>Holotable Mock Draft Simulator</strong> &mdash; run practice drafts against your league's real tendencies before it counts.</li>
-        <li><strong>Imperial Draft Command</strong> &mdash; a live, pick-by-pick recommendation engine built around your exact roster.</li>
-        <li><strong>Live Draft Surveillance</strong> &mdash; every pick across the room tracked and reflected on your board instantly.</li>
-        <li><strong>Market Value Index</strong> &mdash; see where the league is actually drafting a player, not just where he's ranked.</li>
-        <li><strong>Casualty Forecast</strong> &mdash; injury-risk modeling on every player you're considering.</li>
-        <li><strong>Bloodline Report</strong> &mdash; a first-year player model built for rookies and post-hype sleepers.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>In-Season Tools</h2>
-      <ul>
-        <li><strong>Waiver Wire Bounty Board</strong> &mdash; surfaces the best add on the wire before the rest of your league notices.</li>
-        <li><strong>Trade Tribunal</strong> &mdash; scores every trade offer and tells you, plainly, who won it.</li>
-        <li><strong>Command Bridge</strong> &mdash; one screen with your full roster, matchup, and recommended lineup.</li>
-        <li><strong>Deployment Orders</strong> &mdash; a weekly start/sit call for every player on your roster.</li>
-        <li><strong>League Surveillance Grid</strong> &mdash; a standing scouting report on every other team in your league.</li>
-        <li><strong>Garrison Value Ledger</strong> &mdash; current trade value on every rosterable player, updated weekly.</li>
-      </ul>
-    </section>
-
-    <section>
-      <p class="kicker">Flagship Feature</p>
-      <h2 class="headline">Stop ranking players. Start commanding your draft.</h2>
-      <p class="lede">A ranking sheet tells you who's good. Imperial Draft Command tells you who to take.</p>
-      <div class="scenario">
-        <p>You're on the clock. Four solid names are staring back at you. One grades out higher on paper. Another solves a real hole on your roster. The position is thinning fast, and your next turn is eighteen picks away.</p>
-        <p class="q">Do you lock in the top name &mdash; or can it wait?</p>
-        <p>That's the exact call Imperial Draft Command was built to make for you.</p>
+  <div class="nav">
+    <div class="container nav-row">
+      <div class="nav-brand">
+        <img src="assets/img/brand/logo-wordmark.png" alt="Massive Empire — Fantasy Football Intelligence" />
       </div>
-    </section>
-
-    <section>
-      <h2>Five names. One command.</h2>
-      <p>When the clock is running, you don't need another browser tab full of spreadsheets. Imperial Draft Command hands you five live options for this exact pick, led by a single <strong>Command Pick</strong>.</p>
-      <div class="odds-row">
-        <div class="odds-card act">
-          <div class="pct">15%</div>
-          <div class="odds-label">Take Him Now</div>
-          <div class="odds-desc">He is not coming back around.</div>
-        </div>
-        <div class="odds-card gamble">
-          <div class="pct">50%</div>
-          <div class="odds-label">A Real Gamble</div>
-          <div class="odds-desc">You might get lucky. You might not.</div>
-        </div>
-        <div class="odds-card wait">
-          <div class="pct">85%</div>
-          <div class="odds-label">Safe To Wait</div>
-          <div class="odds-desc">Better value is likely still ahead.</div>
-        </div>
+      <div class="nav-links">
+        <a class="nav-back" href="https://5280content.com/">&larr; 5280 Content</a>
+        <a class="btn btn-primary btn-sm" href="#invite">Request Access</a>
       </div>
-      <p>Every pick in the room changes the math &mdash; so Imperial Draft Command recalculates the instant a selection is made, yours or anyone else's.</p>
-    </section>
-
-    <section>
-      <h2>The pick you skip matters as much as the one you make.</h2>
-      <div class="compare-row">
-        <div class="compare-card">
-          <div class="pos">RB</div>
-          <div class="score">Command Score 93</div>
-          <div class="chance">14% chance he's still there next round</div>
-        </div>
-        <div class="compare-card">
-          <div class="pos">WR</div>
-          <div class="score">Command Score 91</div>
-          <div class="chance">78% chance he's still there next round</div>
-        </div>
-      </div>
-      <p>A plain ranking just tells you which one grades higher. Imperial Draft Command asks the question that actually decides drafts: who do you have to take now, and who can wait?</p>
-    </section>
-
-    <section>
-      <h2>Two modes. Your call.</h2>
-      <div class="mode-row">
-        <div class="mode-card">
-          <h3>Commander Mode</h3>
-          <p>Just your Command Pick, your Top 5, and a clear take-now-or-hold call for each. Make the pick. Let it recalculate. Repeat.</p>
-        </div>
-        <div class="mode-card">
-          <h3>Strategist Mode</h3>
-          <p>Open the full breakdown &mdash; value, market price, positional scarcity, roster fit, survival odds, and every alternative that almost made the cut.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="closing-block">
-      <h2>Take command of your draft.</h2>
-      <p class="tag">Imperial Draft Command &mdash; know who to take, know when to wait.</p>
-    </section>
-
-    <section>
-      <h2>Request an invitation</h2>
-      <p>Fill this out and your application will be reviewed. If approved, you'll receive setup instructions by email.</p>
-
-      <form id="invite-form">
-        <label for="platform">Fantasy football platform</label>
-        <select id="platform" name="platform" required>
-          <option value="" disabled selected>Select your platform</option>
-          <option>ESPN Fantasy Football</option>
-          <option>Yahoo Fantasy Sports</option>
-          <option>Sleeper</option>
-          <option>NFL.com Fantasy</option>
-          <option>CBS Sports Fantasy</option>
-          <option>Fleaflicker</option>
-          <option>Other</option>
-        </select>
-
-        <label for="leagueName">League name</label>
-        <input type="text" id="leagueName" name="leagueName" placeholder="e.g. The League of Pathetic Gentlemen &amp; Two Ladies" required />
-
-        <label for="teamName">Proposed team name</label>
-        <input type="text" id="teamName" name="teamName" placeholder="e.g. Tic-Tic-Bust" required />
-
-        <label for="legalName">Full legal name</label>
-        <input type="text" id="legalName" name="legalName" placeholder="First and last name" required />
-
-        <label for="phone">Mobile phone number</label>
-        <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" required />
-
-        <label for="email">Email address</label>
-        <input type="email" id="email" name="email" placeholder="you@example.com" required />
-
-        <button type="submit" id="submit-btn">Request Invitation</button>
-        <div class="status" id="status"></div>
-      </form>
-    </section>
-
-    <footer>Applications are reviewed on a rolling basis. Not all applicants are approved.</footer>
+    </div>
   </div>
+
+  <header class="hero container">
+    <img class="hero-emblem" src="assets/img/brand/emblem.png" alt="" />
+    <div class="chip" style="margin-bottom:22px;"><span class="dot"></span> Command Network Online</div>
+    <h1 class="headline">Take Command of Your Draft.</h1>
+    <p class="lede">An invite-only intelligence platform built to analyze your league, anticipate the board, and tell you when to act.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="#invite">Enter Draft Command</a>
+      <a class="btn btn-ghost" href="#tools">View The Tools</a>
+    </div>
+  </header>
+
+  <section class="block tight" id="tools">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">Draft-Season Tools</p>
+        <h2 class="section-title">Prepare the offensive.</h2>
+        <p class="section-sub">Six systems built to get you through your draft with the edge intact.</p>
+      </div>
+      <div class="tool-grid">
+
+        <a class="tool-card" href="tools/holotable.html">
+          <img class="tool-icon" src="assets/img/icons/holotable.png" alt="" />
+          <h3>Holotable Mock Draft Simulator</h3>
+          <p>Run practice drafts against your league's real tendencies before it counts.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/draft-command.html">
+          <img class="tool-icon" src="assets/img/icons/draft-command.png" alt="" />
+          <h3>Imperial Draft Command</h3>
+          <p>A live, pick-by-pick recommendation engine built around your exact roster.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/draft-surveillance.html">
+          <img class="tool-icon" src="assets/img/icons/draft-surveillance.png" alt="" />
+          <h3>Live Draft Surveillance</h3>
+          <p>Every pick across the room tracked and reflected on your board instantly.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/market-value-index.html">
+          <img class="tool-icon" src="assets/img/icons/market-value-index.png" alt="" />
+          <h3>Market Value Index</h3>
+          <p>See where the league is actually drafting a player, not just where he's ranked.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/casualty-forecast.html">
+          <img class="tool-icon" src="assets/img/icons/casualty-forecast.png" alt="" />
+          <h3>Casualty Forecast</h3>
+          <p>Injury-risk modeling on every player you're considering.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/bloodline-report.html">
+          <img class="tool-icon" src="assets/img/icons/bloodline-report.png" alt="" />
+          <h3>Bloodline Report</h3>
+          <p>A first-year player model built for rookies and post-hype sleepers.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="block tight">
+    <div class="container">
+      <div class="section-head">
+        <p class="kicker">In-Season Tools</p>
+        <h2 class="section-title">Hold the line all year.</h2>
+        <p class="section-sub">Six systems that keep working the moment your draft ends.</p>
+      </div>
+      <div class="tool-grid">
+
+        <a class="tool-card" href="tools/waiver-wire.html">
+          <img class="tool-icon" src="assets/img/icons/waiver-wire.png" alt="" />
+          <h3>Waiver Wire Bounty Board</h3>
+          <p>Surfaces the best add on the wire before the rest of your league notices.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/trade-tribunal.html">
+          <img class="tool-icon" src="assets/img/icons/trade-tribunal.png" alt="" />
+          <h3>Trade Tribunal</h3>
+          <p>Scores every trade offer and tells you, plainly, who won it.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/command-bridge.html">
+          <img class="tool-icon" src="assets/img/icons/command-bridge.png" alt="" />
+          <h3>Command Bridge</h3>
+          <p>One screen with your full roster, matchup, and recommended lineup.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/deployment-orders.html">
+          <img class="tool-icon" src="assets/img/icons/deployment-orders.png" alt="" />
+          <h3>Deployment Orders</h3>
+          <p>A weekly start/sit call for every player on your roster.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/league-surveillance.html">
+          <img class="tool-icon" src="assets/img/icons/league-surveillance.png" alt="" />
+          <h3>League Surveillance Grid</h3>
+          <p>A standing scouting report on every other team in your league.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+        <a class="tool-card" href="tools/garrison-ledger.html">
+          <img class="tool-icon" src="assets/img/icons/garrison-ledger.png" alt="" />
+          <h3>Garrison Value Ledger</h3>
+          <p>Current trade value on every rosterable player, updated weekly.</p>
+          <span class="open">Open Dossier &rarr;</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="container">
+      <div class="card lede-block" style="margin:0 auto; max-width:760px;">
+        <p class="kicker">Flagship Feature</p>
+        <h2 class="section-title" style="font-size:clamp(1.5rem,3vw,2rem);">Stop ranking players. Start commanding your draft.</h2>
+        <p class="section-sub" style="margin-bottom:14px;">A ranking sheet tells you who's good. Imperial Draft Command tells you who to take.</p>
+        <div class="scenario">
+          <p>You're on the clock. Four solid names are staring back at you. One grades out higher on paper. Another solves a real hole on your roster. The position is thinning fast, and your next turn is eighteen picks away.</p>
+          <p class="q">Do you lock in the top name &mdash; or can it wait?</p>
+          <p>That's the exact call Imperial Draft Command was built to make for you.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tight">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title" style="font-size:1.6rem;">Five names. One command.</h2>
+        <p class="section-sub">When the clock is running, you don't need another browser tab full of spreadsheets. Imperial Draft Command hands you five live options for this exact pick, led by a single <strong style="color:var(--text);">Command Pick</strong>.</p>
+        <div class="odds-row">
+          <div class="odds-card act">
+            <div class="pct">15%</div>
+            <div class="odds-label">Take Him Now</div>
+            <div class="odds-desc">He is not coming back around.</div>
+          </div>
+          <div class="odds-card gamble">
+            <div class="pct">50%</div>
+            <div class="odds-label">A Real Gamble</div>
+            <div class="odds-desc">You might get lucky. You might not.</div>
+          </div>
+          <div class="odds-card wait">
+            <div class="pct">85%</div>
+            <div class="odds-label">Safe To Wait</div>
+            <div class="odds-desc">Better value is likely still ahead.</div>
+          </div>
+        </div>
+        <p class="section-sub" style="margin-top:20px;">Every pick in the room changes the math &mdash; so Imperial Draft Command recalculates the instant a selection is made, yours or anyone else's.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tight">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title" style="font-size:1.6rem;">The pick you skip matters as much as the one you make.</h2>
+        <div class="compare-row">
+          <div class="compare-card">
+            <div class="pos">RB</div>
+            <div class="score">Command Score 93</div>
+            <div class="chance">14% chance he's still there next round</div>
+          </div>
+          <div class="compare-card">
+            <div class="pos">WR</div>
+            <div class="score">Command Score 91</div>
+            <div class="chance">78% chance he's still there next round</div>
+          </div>
+        </div>
+        <p class="section-sub" style="margin-top:16px;">A plain ranking just tells you which one grades higher. Imperial Draft Command asks the question that actually decides drafts: who do you have to take now, and who can wait?</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tight">
+    <div class="container">
+      <div class="card">
+        <h2 class="section-title" style="font-size:1.6rem;">Two modes. Your call.</h2>
+        <div class="mode-row">
+          <div class="mode-card">
+            <h3>Commander Mode</h3>
+            <p>Just your Command Pick, your Top 5, and a clear take-now-or-hold call for each. Make the pick. Let it recalculate. Repeat.</p>
+          </div>
+          <div class="mode-card">
+            <h3>Strategist Mode</h3>
+            <p>Open the full breakdown &mdash; value, market price, positional scarcity, roster fit, survival odds, and every alternative that almost made the cut.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tight center">
+    <div class="container">
+      <h2 class="section-title">Take command of your draft.</h2>
+      <p class="section-sub" style="font-style:italic;">Imperial Draft Command &mdash; know who to take, know when to wait.</p>
+    </div>
+  </section>
+
+  <section class="block" id="invite">
+    <div class="container">
+      <div class="card form-card">
+        <h2 class="section-title" style="font-size:1.6rem;">Request an invitation</h2>
+        <p class="section-sub">Fill this out and your application will be reviewed. If approved, you'll receive setup instructions by email.</p>
+
+        <form id="invite-form">
+          <label for="platform">Fantasy football platform</label>
+          <select id="platform" name="platform" required>
+            <option value="" disabled selected>Select your platform</option>
+            <option>ESPN Fantasy Football</option>
+            <option>Yahoo Fantasy Sports</option>
+            <option>Sleeper</option>
+            <option>NFL.com Fantasy</option>
+            <option>CBS Sports Fantasy</option>
+            <option>Fleaflicker</option>
+            <option>Other</option>
+          </select>
+
+          <label for="leagueName">League name</label>
+          <input type="text" id="leagueName" name="leagueName" placeholder="e.g. The League of Pathetic Gentlemen &amp; Two Ladies" required />
+
+          <label for="teamName">Proposed team name</label>
+          <input type="text" id="teamName" name="teamName" placeholder="e.g. Tic-Tic-Bust" required />
+
+          <label for="legalName">Full legal name</label>
+          <input type="text" id="legalName" name="legalName" placeholder="First and last name" required />
+
+          <label for="phone">Mobile phone number</label>
+          <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" required />
+
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+
+          <button type="submit" id="submit-btn" class="btn btn-primary form-submit">Request Invitation</button>
+          <div class="status" id="status"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>Applications are reviewed on a rolling basis. Not all applicants are approved.</p>
+      <p><a href="https://5280content.com/">&larr; Back to 5280 Content</a></p>
+      <p class="foot-classified">Imperial Intelligence // Classified — Command Network Online</p>
+    </div>
+  </footer>
 
   <div class="modal-overlay" id="modal-overlay">
     <div class="modal-box">
@@ -444,85 +291,11 @@
       <div class="modal-content">
         <span class="modal-badge">Application Under Review</span>
         <div id="modal-text"></div>
-        <button type="button" id="modal-close-btn">Acknowledge Transmission</button>
+        <button type="button" id="modal-close-btn" class="btn btn-ghost">Acknowledge Transmission</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const form = document.getElementById('invite-form');
-    const statusEl = document.getElementById('status');
-    const btn = document.getElementById('submit-btn');
-    const modalOverlay = document.getElementById('modal-overlay');
-    const modalText = document.getElementById('modal-text');
-    const modalCloseBtn = document.getElementById('modal-close-btn');
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function showRejectionModal(legalName) {
-      const firstName = escapeHtml((legalName || '').trim().split(/\s+/)[0] || 'Applicant');
-      modalText.innerHTML =
-        `<p>You cannot hide from the dark side, <strong>${firstName}</strong>.</p>` +
-        `<p>Your presence &mdash; and your pathetic fantasy roster &mdash; are unmistakable. I knew it was you from the moment you arrived.</p>` +
-        `<p>Deserved or not, your application has been burst-transmitted to the Imperial Council.</p>` +
-        `<p>Their decision will either create a dynasty or crush your season entirely.</p>` +
-        `<p>Check your email in a few minutes, where your fate will be revealed.</p>`;
-      modalOverlay.classList.add('show');
-    }
-
-    modalCloseBtn.addEventListener('click', () => {
-      modalOverlay.classList.remove('show');
-    });
-
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) modalOverlay.classList.remove('show');
-    });
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      btn.disabled = true;
-      btn.textContent = 'Submitting...';
-      statusEl.className = 'status show ok';
-      statusEl.textContent = '';
-
-      const legalName = document.getElementById('legalName').value;
-      const payload = {
-        platform: document.getElementById('platform').value,
-        leagueName: document.getElementById('leagueName').value,
-        teamName: document.getElementById('teamName').value,
-        legalName: legalName,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
-      };
-
-      try {
-        const res = await fetch('/api/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-
-        if (!res.ok) throw new Error('bad response');
-
-        form.reset();
-        btn.textContent = 'Request Invitation';
-        statusEl.className = 'status show ok';
-        statusEl.textContent = 'Your application has been received and is under review. You will hear back by email.';
-        showRejectionModal(legalName);
-      } catch (err) {
-        btn.textContent = 'Request Invitation';
-        statusEl.className = 'status show err';
-        statusEl.textContent = 'Something went wrong submitting your application. Please try again.';
-      } finally {
-        btn.disabled = false;
-      }
-    });
-  </script>
+  <script src="assets/js/invite.js"></script>
 </body>
 </html>
