@@ -402,13 +402,38 @@ input:focus, select:focus {
 /* ---------- footer ---------- */
 footer.site-footer {
   border-top: 1px solid var(--border);
-  padding: 36px 0 44px;
-  text-align: center;
+  padding: 56px 0 32px;
   color: var(--text-dim);
   font-size: 0.85rem;
 }
 footer.site-footer a { color: var(--text-dim); text-decoration: none; }
 footer.site-footer a:hover { color: var(--red-bright); }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 32px;
+  text-align: left;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+}
+.footer-brand-col .footer-logo { height: 22px; width: auto; margin-bottom: 12px; opacity: 0.9; }
+.footer-brand-col .footer-tagline { font-size: 0.82rem; color: var(--text-dim); max-width: 220px; }
+.footer-col { display: flex; flex-direction: column; gap: 10px; }
+.footer-col .footer-heading {
+  font-family: var(--font-heading);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.76rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.footer-col a { font-size: 0.85rem; line-height: 1.5; }
+
+.footer-bottom { text-align: center; padding-top: 28px; }
+.footer-bottom p { margin: 0 0 6px; }
+.footer-bottom .footer-copyright { color: var(--text-dim); }
+.footer-bottom .footer-company { color: var(--text-dim); }
 footer.site-footer .foot-classified {
   font-family: var(--font-heading);
   letter-spacing: 0.12em;
@@ -417,6 +442,26 @@ footer.site-footer .foot-classified {
   color: #565d66;
   margin-top: 10px;
 }
+
+@media (max-width: 880px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-brand-col { grid-column: 1 / -1; }
+}
+@media (max-width: 560px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- live preview / demo section ---------- */
+.demo-frame {
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 0 1px rgba(215,25,32,0.08), 0 30px 80px -30px rgba(0,0,0,0.7), 0 0 60px -20px rgba(215,25,32,0.25);
+  background: var(--card);
+}
+.demo-frame img { display: block; width: 100%; height: auto; }
 
 /* utility */
 .center { text-align: center; }
