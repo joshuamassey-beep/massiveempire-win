@@ -183,37 +183,48 @@
         <h2 class="section-title" style="font-size:1.6rem;">Request an invitation</h2>
         <p class="section-sub">Fill this out and your application will be reviewed. If approved, you'll receive setup instructions by email.</p>
 
-        <form id="invite-form">
-          <label for="platform">Fantasy football platform</label>
-          <select id="platform" name="platform" required>
-            <option value="" disabled selected>Select your platform</option>
-            <option>ESPN Fantasy Football</option>
-            <option>Yahoo Fantasy Sports</option>
-            <option>Sleeper</option>
-            <option>NFL.com Fantasy</option>
-            <option>CBS Sports Fantasy</option>
-            <option>Fleaflicker</option>
-            <option>Other</option>
-          </select>
+        <div class="invite-form-wrap">
+          <form id="invite-form">
+            <label for="platform">Fantasy football platform</label>
+            <select id="platform" name="platform" required disabled>
+              <option value="" disabled selected>Select your platform</option>
+              <option>ESPN Fantasy Football</option>
+              <option>Yahoo Fantasy Sports</option>
+              <option>Sleeper</option>
+              <option>NFL.com Fantasy</option>
+              <option>CBS Sports Fantasy</option>
+              <option>Fleaflicker</option>
+              <option>Other</option>
+            </select>
 
-          <label for="leagueName">League name</label>
-          <input type="text" id="leagueName" name="leagueName" placeholder="e.g. The League of Pathetic Gentlemen &amp; Two Ladies" required />
+            <label for="leagueName">League name</label>
+            <input type="text" id="leagueName" name="leagueName" placeholder="e.g. The League of Pathetic Gentlemen &amp; Two Ladies" required disabled />
 
-          <label for="teamName">Proposed team name</label>
-          <input type="text" id="teamName" name="teamName" placeholder="e.g. Tic-Tic-Bust" required />
+            <label for="teamName">Proposed team name</label>
+            <input type="text" id="teamName" name="teamName" placeholder="e.g. Tic-Tic-Bust" required disabled />
 
-          <label for="legalName">Full legal name</label>
-          <input type="text" id="legalName" name="legalName" placeholder="First and last name" required />
+            <label for="legalName">Full legal name</label>
+            <input type="text" id="legalName" name="legalName" placeholder="First and last name" required disabled />
 
-          <label for="phone">Mobile phone number</label>
-          <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" required />
+            <label for="phone">Mobile phone number</label>
+            <input type="tel" id="phone" name="phone" placeholder="(555) 555-5555" required disabled />
 
-          <label for="email">Email address</label>
-          <input type="email" id="email" name="email" placeholder="you@example.com" required />
+            <label for="email">Email address</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required disabled />
 
-          <button type="submit" id="submit-btn" class="btn btn-primary form-submit">Request Invitation</button>
-          <div class="status" id="status"></div>
-        </form>
+            <button type="submit" id="submit-btn" class="btn btn-primary form-submit" disabled>Request Invitation</button>
+            <div class="status" id="status"></div>
+          </form>
+
+          <div class="form-lock-overlay" id="form-lock-overlay">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="lock-icon">
+              <rect x="5" y="11" width="14" height="9" rx="2" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M8 11V7.5a4 4 0 018 0V11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+            <p>Applications are gated by a short confidentiality agreement.</p>
+            <button type="button" id="open-agreement-btn" class="btn btn-ghost btn-sm">Review Agreement to Unlock</button>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -275,6 +286,26 @@
     </div>
   </div>
 
+  <div class="modal-overlay" id="agreement-overlay">
+    <div class="agreement-box">
+      <button type="button" class="agreement-close" id="agreement-close-btn" aria-label="Close">&times;</button>
+      <span class="modal-badge">Before You Apply</span>
+      <h3 class="agreement-title">Applicant Confidentiality Agreement</h3>
+      <div class="agreement-scroll" id="agreement-scroll">
+        <p>By submitting this application, you agree to keep confidential the contents of any correspondence you receive from Massive Empire in connection with it &mdash; including anything sent to the email address provided above. Do not describe, forward, screenshot, or share it with fellow league managers, co-owners, or anyone else &mdash; <strong>especially</strong> anyone in your league &mdash; <strong>until Darth Jos releases you from his grip via the EFFL Signal thread.</strong></p>
+        <p>This applies regardless of whether your application is approved, denied, or delayed, and holds indefinitely from the date of submission until that release is granted.</p>
+        <p>This exists so that every applicant experiences their own correspondence firsthand, without it being spoiled by someone else first. Sharing it before release undermines that experience for them.</p>
+        <p>By checking the box below, you confirm you've read this Agreement and agree to its terms.</p>
+      </div>
+      <label class="agreement-check" id="agreement-check-label">
+        <input type="checkbox" id="agreement-checkbox" disabled />
+        <span>I have read and agree to the Confidentiality Agreement above.</span>
+      </label>
+      <p class="agreement-hint" id="agreement-hint">Scroll to the bottom to enable the checkbox.</p>
+      <button type="button" id="agreement-accept-btn" class="btn btn-primary" disabled>Accept &amp; Continue</button>
+    </div>
+  </div>
+
   <script src="assets/js/invite.js"></script>
   <script>
     (function () {
@@ -327,6 +358,81 @@
       unlockEvents.forEach(function (evt) {
         document.addEventListener(evt, unlockOnFirstInteraction, { once: true, passive: true });
       });
+    })();
+  </script>
+  <script>
+    (function () {
+      var overlay = document.getElementById('agreement-overlay');
+      var scrollArea = document.getElementById('agreement-scroll');
+      var checkbox = document.getElementById('agreement-checkbox');
+      var hint = document.getElementById('agreement-hint');
+      var acceptBtn = document.getElementById('agreement-accept-btn');
+      var closeBtn = document.getElementById('agreement-close-btn');
+      var openBtn = document.getElementById('open-agreement-btn');
+      var lockOverlay = document.getElementById('form-lock-overlay');
+      var form = document.getElementById('invite-form');
+      if (!overlay || !form) return;
+
+      var formFields = form.querySelectorAll('input, select, button');
+
+      function openAgreement() {
+        overlay.classList.add('show');
+        // Re-check scroll position after the modal is actually visible and
+        // laid out — if the agreement fits without scrolling on this
+        // viewport, this unlocks the checkbox immediately instead of
+        // leaving it stuck disabled (measuring while display:none reports
+        // a height of 0, which is why this can't happen before .show).
+        requestAnimationFrame(function () {
+          checkScrollPosition();
+        });
+      }
+      function closeAgreement() {
+        overlay.classList.remove('show');
+      }
+      function checkScrollPosition() {
+        var atBottom = scrollArea.scrollTop + scrollArea.clientHeight >= scrollArea.scrollHeight - 8;
+        if (atBottom) {
+          checkbox.disabled = false;
+          hint.style.display = 'none';
+        }
+      }
+      function updateAcceptState() {
+        acceptBtn.disabled = !checkbox.checked;
+      }
+      function unlockForm() {
+        formFields.forEach(function (el) { el.disabled = false; });
+        lockOverlay.classList.add('is-unlocked');
+        closeAgreement();
+      }
+
+      openBtn.addEventListener('click', openAgreement);
+      closeBtn.addEventListener('click', closeAgreement);
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeAgreement();
+      });
+      scrollArea.addEventListener('scroll', checkScrollPosition);
+      checkbox.addEventListener('change', updateAcceptState);
+      acceptBtn.addEventListener('click', function () {
+        if (!checkbox.checked) return;
+        unlockForm();
+      });
+
+      // Auto-open the agreement the first time the invite section scrolls
+      // into view, so most applicants see it without having to notice the
+      // lock overlay first.
+      var inviteSection = document.getElementById('invite');
+      if (inviteSection && 'IntersectionObserver' in window) {
+        var opened = false;
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting && !opened && !checkbox.checked) {
+              opened = true;
+              openAgreement();
+            }
+          });
+        }, { threshold: 0.4 });
+        observer.observe(inviteSection);
+      }
     })();
   </script>
 </body>
