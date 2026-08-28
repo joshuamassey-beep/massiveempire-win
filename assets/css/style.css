@@ -103,7 +103,7 @@ a { color: inherit; }
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 0;
+  padding: 12px 24px;
 }
 .nav-brand { display: flex; align-items: center; }
 .nav-brand img { height: 48px; width: auto; }
@@ -468,6 +468,83 @@ input:focus, select:focus {
 #agreement-accept-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 @media (max-width: 560px) {
   .agreement-box { padding: 28px 22px; }
+}
+
+/* ---------- nav audio widget + sign in/up ---------- */
+.audio-widget { position: relative; display: flex; align-items: center; }
+.audio-icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.audio-icon-btn:hover, .audio-icon-btn.is-playing { border-color: rgba(215,25,32,0.5); color: var(--red-bright); }
+.audio-icon-btn svg { width: 17px; height: 17px; }
+.audio-icon-btn .icon-playing { display: none; }
+.audio-icon-btn.is-playing .icon-muted { display: none; }
+.audio-icon-btn.is-playing .icon-playing { display: block; }
+
+.audio-popover {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  width: 180px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.55);
+  z-index: 60;
+}
+.audio-popover.show { display: block; }
+.audio-play-btn {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--elevated);
+  color: var(--text);
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: border-color 0.15s ease;
+}
+.audio-play-btn:hover { border-color: var(--red-bright); }
+.volume-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+.volume-row input[type="range"] { width: 100%; accent-color: var(--red-bright); }
+
+.nav-auth-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: color 0.15s ease;
+}
+.nav-auth-link:hover { color: var(--text); }
+
+@media (max-width: 640px) {
+  .nav-row { flex-wrap: wrap; row-gap: 10px; }
+  .nav-links { flex-wrap: wrap; justify-content: flex-end; gap: 12px; }
 }
 
 /* ---------- tool detail page ---------- */

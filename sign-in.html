@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign In — Massive Empire</title>
+<meta name="description" content="Account access for approved Massive Empire commanders." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="16x16" href="assets/img/brand/favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/brand/favicon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="assets/img/brand/favicon-192.png" />
+<link rel="shortcut icon" href="favicon.ico" />
+<link rel="apple-touch-icon" href="assets/img/brand/favicon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700&family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <div class="nav">
+    <div class="container nav-row">
+      <div class="nav-brand">
+        <a href="index.html"><img src="assets/img/brand/logo-wordmark.png" alt="Massive Empire — Fantasy Football Intelligence" /></a>
+      </div>
+      <div class="nav-links">
+        <div class="audio-widget" id="audio-widget">
+          <button type="button" id="audio-icon-btn" class="audio-icon-btn" aria-expanded="false" aria-label="Audio settings">
+            <svg class="icon-muted" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
+              <path d="M16.5 8.5l5 7M21.5 8.5l-5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <svg class="icon-playing" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
+              <path d="M16.2 8.8a5 5 0 010 6.4M19 6.5a8.5 8.5 0 010 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="audio-popover" id="audio-popover">
+            <button type="button" id="audio-play-btn" class="audio-play-btn">Play Theme</button>
+            <label class="volume-row">
+              <span>Volume</span>
+              <input type="range" id="volume-slider" min="0" max="100" value="100" />
+            </label>
+          </div>
+          <audio id="bg-music" loop preload="auto" data-default-volume="1">
+            <source src="assets/audio/dynasty-begins.mp3" type="audio/mpeg" />
+          </audio>
+        </div>
+        <a class="nav-back" href="index.html">&larr; Home</a>
+        <a class="nav-auth-link" href="index.html#invite">Sign Up</a>
+        <a class="btn btn-primary btn-sm" href="index.html#invite">Request Live Demo</a>
+      </div>
+    </div>
+  </div>
+
+  <section class="block" style="padding-top:72px;">
+    <div class="container">
+      <div class="card form-card" style="max-width:420px;">
+        <h1 class="section-title" style="font-size:1.6rem;">Sign In</h1>
+        <p class="section-sub">Account access for approved Commanders.</p>
+
+        <form id="signin-form">
+          <label for="si-email">Email address</label>
+          <input type="email" id="si-email" name="email" placeholder="you@example.com" required />
+
+          <label for="si-password">Password</label>
+          <input type="password" id="si-password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required />
+
+          <button type="submit" id="si-submit-btn" class="btn btn-primary form-submit">Sign In</button>
+          <div class="status" id="si-status"></div>
+        </form>
+
+        <p style="margin-top:20px; text-align:center; font-size:0.88rem; color:var(--text-dim);">
+          Don&rsquo;t have access yet? <a href="index.html#invite" style="color:var(--red-bright); text-decoration:none;">Request a live demo</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand-col">
+          <img src="assets/img/brand/logo-wordmark.png" alt="Massive Empire" class="footer-logo" />
+          <p class="footer-tagline">Invite-only fantasy football intelligence.</p>
+        </div>
+        <div class="footer-col">
+          <p class="footer-heading">Command Center</p>
+          <a href="index.html">Home</a>
+          <a href="index.html#tools">All Tools</a>
+          <a href="index.html#invite">Request Live Demo</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-heading">Draft-Season Tools</p>
+          <a href="tools/holotable.html">Holotable Mock Draft Simulator</a>
+          <a href="tools/draft-command.html">Imperial Draft Command</a>
+          <a href="tools/draft-surveillance.html">Live Draft Surveillance</a>
+          <a href="tools/market-value-index.html">Market Value Index</a>
+          <a href="tools/casualty-forecast.html">Casualty Forecast</a>
+          <a href="tools/bloodline-report.html">Bloodline Report</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-heading">In-Season Tools</p>
+          <a href="tools/waiver-wire.html">Waiver Wire Bounty Board</a>
+          <a href="tools/trade-tribunal.html">Trade Tribunal</a>
+          <a href="tools/command-bridge.html">Command Bridge</a>
+          <a href="tools/deployment-orders.html">Deployment Orders</a>
+          <a href="tools/league-surveillance.html">League Surveillance Grid</a>
+          <a href="tools/garrison-ledger.html">Garrison Value Ledger</a>
+        </div>
+        <div class="footer-col">
+          <p class="footer-heading">Company</p>
+          <a href="https://5280content.com/" target="_blank" rel="noopener">5280 Content</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>Applications are reviewed on a rolling basis. Not all applicants are approved.</p>
+        <p class="footer-copyright">&copy; 2026 Massive Empire. All rights reserved.</p>
+        <p class="footer-company">Massive Empire: Imperial Command is a 5280 Content LLC company.</p>
+        <p class="foot-classified">Imperial Intelligence // Classified — Command Network Online</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/audio-widget.js"></script>
+  <script>
+    document.getElementById('signin-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var status = document.getElementById('si-status');
+      status.className = 'status show ok';
+      status.textContent = "Account sign-in isn't live yet — Imperial Command tools are still invite-only. Request a live demo below to get on the list.";
+    });
+  </script>
+</body>
+</html>

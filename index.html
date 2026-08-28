@@ -24,7 +24,31 @@
         <img src="assets/img/brand/logo-wordmark.png" alt="Massive Empire — Fantasy Football Intelligence" />
       </div>
       <div class="nav-links">
-        <a class="btn btn-primary btn-sm" href="#invite">Request Access</a>
+        <div class="audio-widget" id="audio-widget">
+          <button type="button" id="audio-icon-btn" class="audio-icon-btn" aria-expanded="false" aria-label="Audio settings">
+            <svg class="icon-muted" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
+              <path d="M16.5 8.5l5 7M21.5 8.5l-5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+            <svg class="icon-playing" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
+              <path d="M16.2 8.8a5 5 0 010 6.4M19 6.5a8.5 8.5 0 010 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="audio-popover" id="audio-popover">
+            <button type="button" id="audio-play-btn" class="audio-play-btn">Play Theme</button>
+            <label class="volume-row">
+              <span>Volume</span>
+              <input type="range" id="volume-slider" min="0" max="100" value="100" />
+            </label>
+          </div>
+          <audio id="bg-music" loop preload="auto" data-default-volume="1">
+            <source src="assets/audio/dynasty-begins.mp3" type="audio/mpeg" />
+          </audio>
+        </div>
+        <a class="nav-auth-link" href="sign-in.html">Sign In</a>
+        <a class="nav-auth-link" href="#invite">Sign Up</a>
+        <a class="btn btn-primary btn-sm" href="#invite">Request Live Demo</a>
       </div>
     </div>
   </div>
@@ -41,19 +65,6 @@
             <source src="assets/video/draft-command-demo.mp4" type="video/mp4" />
           </video>
         </a>
-        <button type="button" id="music-toggle" class="music-toggle" aria-pressed="false" aria-label="Play background music">
-          <svg class="icon-muted" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
-            <path d="M16.5 8.5l5 7M21.5 8.5l-5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-          <svg class="icon-playing" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
-            <path d="M16.2 8.8a5 5 0 010 6.4M19 6.5a8.5 8.5 0 010 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </button>
-        <audio id="bg-music" loop preload="auto">
-          <source src="assets/audio/dynasty-begins.mp3" type="audio/mpeg" />
-        </audio>
       </div>
       <p class="demo-disclaimer">Disclaimer: Holotable doesn&rsquo;t exist yet &mdash; this is a demo of the feeling, not the feature. But every league has a villain, and it&rsquo;s usually just whoever&rsquo;s winning. Imperial Command exists to make that villain you. Own it.</p>
     </div>
@@ -240,7 +251,7 @@
           <p class="footer-heading">Command Center</p>
           <a href="index.html">Home</a>
           <a href="index.html#tools">All Tools</a>
-          <a href="index.html#invite">Request Access</a>
+          <a href="index.html#invite">Request Live Demo</a>
         </div>
         <div class="footer-col">
           <p class="footer-heading">Draft-Season Tools</p>
@@ -307,59 +318,7 @@
   </div>
 
   <script src="assets/js/invite.js"></script>
-  <script>
-    (function () {
-      var btn = document.getElementById('music-toggle');
-      var audio = document.getElementById('bg-music');
-      if (!btn || !audio) return;
-
-      function setButtonState(isPlaying) {
-        if (isPlaying) {
-          btn.classList.add('is-playing');
-          btn.setAttribute('aria-pressed', 'true');
-          btn.setAttribute('aria-label', 'Mute background music');
-        } else {
-          btn.classList.remove('is-playing');
-          btn.setAttribute('aria-pressed', 'false');
-          btn.setAttribute('aria-label', 'Play background music');
-        }
-      }
-
-      function tryPlay() {
-        var p = audio.play();
-        if (p && typeof p.then === 'function') {
-          p.then(function () { setButtonState(true); }).catch(function () { setButtonState(false); });
-        }
-      }
-
-      btn.addEventListener('click', function () {
-        if (audio.paused) {
-          tryPlay();
-        } else {
-          audio.pause();
-          setButtonState(false);
-        }
-      });
-
-      // Attempt to start the music automatically. Most browsers block unmuted
-      // autoplay until the visitor has interacted with the page, so this will
-      // silently fail there — the fallback below catches the visitor's first
-      // interaction anywhere on the page and starts the music then, without
-      // requiring them to find and click the mute button specifically.
-      tryPlay();
-
-      var unlockEvents = ['pointerdown', 'keydown', 'touchstart'];
-      function unlockOnFirstInteraction() {
-        if (audio.paused) tryPlay();
-        unlockEvents.forEach(function (evt) {
-          document.removeEventListener(evt, unlockOnFirstInteraction);
-        });
-      }
-      unlockEvents.forEach(function (evt) {
-        document.addEventListener(evt, unlockOnFirstInteraction, { once: true, passive: true });
-      });
-    })();
-  </script>
+  <script src="assets/js/audio-widget.js"></script>
   <script>
     (function () {
       var overlay = document.getElementById('agreement-overlay');
@@ -416,23 +375,6 @@
         if (!checkbox.checked) return;
         unlockForm();
       });
-
-      // Auto-open the agreement the first time the invite section scrolls
-      // into view, so most applicants see it without having to notice the
-      // lock overlay first.
-      var inviteSection = document.getElementById('invite');
-      if (inviteSection && 'IntersectionObserver' in window) {
-        var opened = false;
-        var observer = new IntersectionObserver(function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting && !opened && !checkbox.checked) {
-              opened = true;
-              openAgreement();
-            }
-          });
-        }, { threshold: 0.4 });
-        observer.observe(inviteSection);
-      }
     })();
   </script>
 </body>
