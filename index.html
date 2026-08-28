@@ -51,7 +51,7 @@
             <path d="M16.2 8.8a5 5 0 010 6.4M19 6.5a8.5 8.5 0 010 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
           </svg>
         </button>
-        <audio id="bg-music" loop preload="none">
+        <audio id="bg-music" loop preload="auto">
           <source src="assets/audio/dynasty-begins.mp3" type="audio/mpeg" />
         </audio>
       </div>
@@ -281,18 +281,51 @@
       var btn = document.getElementById('music-toggle');
       var audio = document.getElementById('bg-music');
       if (!btn || !audio) return;
-      btn.addEventListener('click', function () {
-        if (audio.paused) {
-          audio.play().catch(function () {});
+
+      function setButtonState(isPlaying) {
+        if (isPlaying) {
           btn.classList.add('is-playing');
           btn.setAttribute('aria-pressed', 'true');
           btn.setAttribute('aria-label', 'Mute background music');
         } else {
-          audio.pause();
           btn.classList.remove('is-playing');
           btn.setAttribute('aria-pressed', 'false');
           btn.setAttribute('aria-label', 'Play background music');
         }
+      }
+
+      function tryPlay() {
+        var p = audio.play();
+        if (p && typeof p.then === 'function') {
+          p.then(function () { setButtonState(true); }).catch(function () { setButtonState(false); });
+        }
+      }
+
+      btn.addEventListener('click', function () {
+        if (audio.paused) {
+          tryPlay();
+        } else {
+          audio.pause();
+          setButtonState(false);
+        }
+      });
+
+      // Attempt to start the music automatically. Most browsers block unmuted
+      // autoplay until the visitor has interacted with the page, so this will
+      // silently fail there — the fallback below catches the visitor's first
+      // interaction anywhere on the page and starts the music then, without
+      // requiring them to find and click the mute button specifically.
+      tryPlay();
+
+      var unlockEvents = ['pointerdown', 'keydown', 'touchstart'];
+      function unlockOnFirstInteraction() {
+        if (audio.paused) tryPlay();
+        unlockEvents.forEach(function (evt) {
+          document.removeEventListener(evt, unlockOnFirstInteraction);
+        });
+      }
+      unlockEvents.forEach(function (evt) {
+        document.addEventListener(evt, unlockOnFirstInteraction, { once: true, passive: true });
       });
     })();
   </script>
