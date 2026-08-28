@@ -40,10 +40,10 @@
             <button type="button" id="audio-play-btn" class="audio-play-btn">Play Theme</button>
             <label class="volume-row">
               <span>Volume</span>
-              <input type="range" id="volume-slider" min="0" max="100" value="100" />
+              <input type="range" id="volume-slider" min="0" max="100" value="33" />
             </label>
           </div>
-          <audio id="bg-music" loop preload="auto" data-default-volume="1.0">
+          <audio id="bg-music" loop preload="auto" data-default-volume="0.33">
             <source src="../assets/audio/dynasty-begins.mp3" type="audio/mpeg" />
           </audio>
         </div>
@@ -69,6 +69,21 @@
       </div>
       <div class="center mt-lg">
         <a class="btn btn-primary" href="../index.html#invite">Request Live Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tight">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" style="font-size:1.5rem;">See it in action.</h2>
+      </div>
+      <div class="demo-wrap" style="max-width:900px;">
+        <a class="demo-frame" href="../index.html#invite" aria-label="Request a live demo">
+          <video autoplay muted loop playsinline preload="auto" poster="../assets/img/marketing/bloodline-report-demo-poster.jpg">
+            <source src="../assets/video/bloodline-report-demo.mp4" type="video/mp4" />
+          </video>
+        </a>
       </div>
     </div>
   </section>
