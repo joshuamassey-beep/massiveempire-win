@@ -65,6 +65,9 @@
 
           <label for="si-password">Password</label>
           <input type="password" id="si-password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required />
+          <div style="text-align:right; margin-top:-8px;">
+            <a href="#" id="forgot-password-link" style="font-size:0.82rem; color:var(--text-dim); text-decoration:none;">Forgot password?</a>
+          </div>
 
           <button type="submit" id="si-submit-btn" class="btn btn-primary form-submit">Sign In</button>
           <div class="status" id="si-status"></div>
@@ -129,6 +132,12 @@
       var status = document.getElementById('si-status');
       status.className = 'status show ok';
       status.textContent = "Account sign-in isn't live yet — Imperial Command tools are still invite-only. Request a live demo below to get on the list.";
+    });
+    document.getElementById('forgot-password-link').addEventListener('click', function (e) {
+      e.preventDefault();
+      var status = document.getElementById('si-status');
+      status.className = 'status show ok';
+      status.textContent = "Password recovery isn't live yet — accounts aren't active. Request a live demo below to get on the list.";
     });
   </script>
 </body>
