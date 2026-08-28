@@ -34,6 +34,19 @@ modalOverlay.addEventListener('click', (e) => {
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  // Hard gate: the confidentiality agreement must be accepted before the
+  // form can be submitted. The submit button is disabled until then as the
+  // primary guard, but this check guarantees the agreement always appears
+  // before the "processing" modal below, even if something else re-enabled
+  // the button (e.g. dev tools, a stray unlock call).
+  const agreementCheckbox = document.getElementById('agreement-checkbox');
+  if (agreementCheckbox && !agreementCheckbox.checked) {
+    const agreementOverlay = document.getElementById('agreement-overlay');
+    if (agreementOverlay) agreementOverlay.classList.add('show');
+    return;
+  }
+
   btn.disabled = true;
   btn.textContent = 'Transmitting...';
   statusEl.className = 'status show ok';
