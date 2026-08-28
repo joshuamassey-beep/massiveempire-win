@@ -451,10 +451,13 @@ footer.site-footer .foot-classified {
 
 /* ---------- live preview / demo section ---------- */
 .demo-section { padding-top: 64px; }
-.demo-frame {
-  display: block;
+.demo-wrap {
+  position: relative;
   max-width: 1100px;
   margin: 0 auto;
+}
+.demo-frame {
+  display: block;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -469,6 +472,41 @@ footer.site-footer .foot-classified {
   transform: translateY(-2px);
 }
 .demo-frame img, .demo-frame video { display: block; width: 100%; height: auto; }
+
+.music-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(5,6,7,0.6);
+  backdrop-filter: blur(4px);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+.music-toggle:hover { border-color: rgba(215,25,32,0.5); color: var(--red-bright); }
+.music-toggle svg { width: 20px; height: 20px; }
+.music-toggle .icon-playing { display: none; }
+.music-toggle.is-playing .icon-muted { display: none; }
+.music-toggle.is-playing .icon-playing { display: block; }
+.music-toggle.is-playing { border-color: rgba(215,25,32,0.5); color: var(--red-bright); }
+
+.demo-disclaimer {
+  max-width: 680px;
+  margin: 18px auto 0;
+  text-align: center;
+  font-size: 0.83rem;
+  line-height: 1.55;
+  color: var(--text-dim);
+  font-style: italic;
+}
 
 /* utility */
 .center { text-align: center; }

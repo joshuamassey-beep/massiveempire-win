@@ -35,11 +35,27 @@
         <h2 class="section-title">See Imperial Draft Command in action.</h2>
         <p class="section-sub">For a look inside the flagship system on live draft day &mdash; Command Score, Survival Odds, and the Intelligence Edge, request access for a live MVP (Minimally Viable Product) demo.</p>
       </div>
-      <a class="demo-frame" href="#invite" aria-label="Request access &mdash; see Imperial Draft Command in action">
-        <video autoplay muted loop playsinline preload="auto" poster="assets/img/marketing/draft-command-demo-poster.jpg">
-          <source src="assets/video/draft-command-demo.mp4" type="video/mp4" />
-        </video>
-      </a>
+      <div class="demo-wrap">
+        <a class="demo-frame" href="#invite" aria-label="Request access &mdash; see Imperial Draft Command in action">
+          <video autoplay muted loop playsinline preload="auto" poster="assets/img/marketing/draft-command-demo-poster.jpg">
+            <source src="assets/video/draft-command-demo.mp4" type="video/mp4" />
+          </video>
+        </a>
+        <button type="button" id="music-toggle" class="music-toggle" aria-pressed="false" aria-label="Play background music">
+          <svg class="icon-muted" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
+            <path d="M16.5 8.5l5 7M21.5 8.5l-5 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <svg class="icon-playing" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor"/>
+            <path d="M16.2 8.8a5 5 0 010 6.4M19 6.5a8.5 8.5 0 010 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <audio id="bg-music" loop preload="none">
+          <source src="assets/audio/dynasty-begins.mp3" type="audio/mpeg" />
+        </audio>
+      </div>
+      <p class="demo-disclaimer">Disclaimer: Holotable doesn&rsquo;t exist yet &mdash; this is a demo of the feeling, not the feature. But every league has a villain, and it&rsquo;s usually just whoever&rsquo;s winning. Imperial Command exists to make that villain you. Own it.</p>
     </div>
   </section>
 
@@ -260,5 +276,25 @@
   </div>
 
   <script src="assets/js/invite.js"></script>
+  <script>
+    (function () {
+      var btn = document.getElementById('music-toggle');
+      var audio = document.getElementById('bg-music');
+      if (!btn || !audio) return;
+      btn.addEventListener('click', function () {
+        if (audio.paused) {
+          audio.play().catch(function () {});
+          btn.classList.add('is-playing');
+          btn.setAttribute('aria-pressed', 'true');
+          btn.setAttribute('aria-label', 'Mute background music');
+        } else {
+          audio.pause();
+          btn.classList.remove('is-playing');
+          btn.setAttribute('aria-pressed', 'false');
+          btn.setAttribute('aria-label', 'Play background music');
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
